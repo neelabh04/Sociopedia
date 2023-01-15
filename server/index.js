@@ -1,3 +1,4 @@
+// Packages import
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
@@ -8,12 +9,23 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+
+// Route imports
 import authRoutes from "./routes/auth.js"
 import userRoutes from "./routes/users.js"
 import postRoutes from "./routes/posts.js"
+
+// Controllers import
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
+
+// Models import
+import User from "./models/User.js";
+import Post from "./models/Post.js";
+
+// dummy Data import
+import { users, posts } from "./data/index.js";
 
 /* Configurations */ 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,6 +67,12 @@ const PORT = process.env.PORT || 6001;
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(() => {
+})
+.then(() => {
     app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
-}).catch((error) => console.log(`${error} did not connect`))
+    
+    /* Add dummy data only one time*/ 
+    // User.insertMany(users);
+    // Post.insertMany(posts);
+})
+.catch((error) => console.log(`${error} did not connect`))
